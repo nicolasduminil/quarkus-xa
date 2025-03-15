@@ -1,12 +1,35 @@
 package fr.simplex_software.quarkus_xa.money_xfr.transfer.domain;
 
+import org.eclipse.microprofile.openapi.annotations.media.*;
+
 import java.math.*;
 
 public class TransferRequest
 {
+  @Schema(
+    description = "Source account ID",
+    example = "ACC123",
+    required = true
+  )
   private String sourceAccountId;
+  @Schema(
+    description = "Destination account ID",
+    example = "ACC123",
+    required = true
+  )
   private String destinationAccountId;
+  @Schema(
+    description = "Amount to transfer",
+    example = "100.50",
+    required = true,
+    minimum = "0.01"
+  )
   private BigDecimal amount;
+  @Schema(
+    description = "Transfer currency",
+    example = "EUR",
+    required = true
+  )
   private String currency;
 
   public TransferRequest()

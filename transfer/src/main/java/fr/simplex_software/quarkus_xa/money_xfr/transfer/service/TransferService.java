@@ -1,6 +1,7 @@
 package fr.simplex_software.quarkus_xa.money_xfr.transfer.service;
 
 import fr.simplex_software.quarkus_xa.money_xfr.account.client.*;
+import fr.simplex_software.quarkus_xa.money_xfr.account.exception.*;
 import fr.simplex_software.quarkus_xa.money_xfr.account.service.*;
 import fr.simplex_software.quarkus_xa.money_xfr.common.*;
 import fr.simplex_software.quarkus_xa.money_xfr.transfer.domain.*;
@@ -22,7 +23,7 @@ public class TransferService
   TransactionalAccountClient accountClient;
 
   @Transactional
-  public Transfer processTransfer(TransferRequest transferRequest)
+  public Transfer processTransfer(TransferRequest transferRequest) throws TransactionFailedException
   {
     Transfer transfer = new Transfer(Common.getRandomId(), transferRequest.getSourceAccountId(),
       transferRequest.getDestinationAccountId(), transferRequest.getAmount(),

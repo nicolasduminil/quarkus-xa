@@ -52,7 +52,7 @@ public class TransferResponse
   public static TransferResponse fromTransfer(Transfer transfer)
   {
     TransferResponse response = new TransferResponse();
-    response.setTransferId(transfer.getTransactionId());
+    response.setTransferId(transfer.getTransferId());
     response.setStatus(transfer.getStatus());
     response.setTimestamp(transfer.getTimestamp());
     return response;
