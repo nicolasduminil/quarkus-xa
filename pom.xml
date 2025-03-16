@@ -11,6 +11,8 @@
     <module>account</module>
     <module>transfer</module>
     <module>common</module>
+    <module>platform</module>
+    <module>xa-resource</module>
   </modules>
   <version>1.0-SNAPSHOT</version>
   <properties>
@@ -61,6 +63,15 @@
               </goals>
             </execution>
           </executions>
+        </plugin>
+        <plugin>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>3.5.1</version>
+          <configuration>
+            <systemPropertyVariables>
+              <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+            </systemPropertyVariables>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>

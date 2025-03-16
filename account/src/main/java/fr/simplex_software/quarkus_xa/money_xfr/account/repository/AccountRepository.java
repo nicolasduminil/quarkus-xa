@@ -8,7 +8,7 @@ import java.util.*;
 @ApplicationScoped
 public class AccountRepository
 {
-  private Map<String, Account> accounts = new HashMap<>();
+  private static Map<String, Account> accounts = new HashMap<>();
 
   public void createAccount(Account account)
   {
@@ -18,9 +18,13 @@ public class AccountRepository
   public Account getAccount(String accountId)
   {
     if (accounts.get(accountId) == null)
+    {
+      System.out.println ("### AccountRepository.getAccount(): Account %s not found".formatted(accountId));
+      accounts.values().forEach(acc -> System.out.println ("acc: %s".formatted(acc.getAccountId())));
       throw new RuntimeException(
         "### AccountRepository.getAccount(): Account %s not found"
-        .formatted(accountId));
+          .formatted(accountId));
+    }
     return accounts.get(accountId);
   }
 
@@ -40,5 +44,10 @@ public class AccountRepository
         "### AccountRepository.deleteAccount(): Account %s not found"
         .formatted(accountId));
     accounts.remove(accountId);
+  }
+
+  public List<Account> getAccounts()
+  {
+    return new ArrayList<>(accounts.values());
   }
 }

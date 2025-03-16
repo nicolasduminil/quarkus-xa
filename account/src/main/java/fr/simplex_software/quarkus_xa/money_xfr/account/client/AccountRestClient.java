@@ -1,23 +1,34 @@
 package fr.simplex_software.quarkus_xa.money_xfr.account.client;
 
-import jakarta.enterprise.context.*;
+import fr.simplex_software.quarkus_xa.money_xfr.account.domain.*;
 import jakarta.transaction.*;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
 import org.eclipse.microprofile.rest.client.inject.*;
 
 import java.math.*;
 
-@ApplicationScoped
-@RegisterRestClient
+@RegisterRestClient(configKey = "account_client")
+@Path("/accounts")
 public interface AccountRestClient
 {
   @POST
-  @Path("/accounts/{accountId}/debit")
+  @Path("/{accountId}/debit")
   @Transactional
-  void debit(@PathParam("accountId") String accountId, BigDecimal amount);
+  Response debit(@PathParam("accountId") String accountId, BigDecimal amount);
 
   @POST
-  @Path("/accounts/{accountId}/credit")
+  @Path("/{accountId}/credit")
   @Transactional
-  void credit(@PathParam("accountId") String accountId, BigDecimal amount);
+  Response credit(@PathParam("accountId") String accountId, BigDecimal amount);
+
+  @GET
+  Response getAccounts();
+
+  @GET
+  @Path("/{accountId}")
+  Response getAccount(@PathParam("accountId") String accountId);
+
+  @POST
+  public Response createAccount(Account account);
 }

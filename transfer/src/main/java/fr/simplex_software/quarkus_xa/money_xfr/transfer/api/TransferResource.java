@@ -1,6 +1,7 @@
 package fr.simplex_software.quarkus_xa.money_xfr.transfer.api;
 
 import fr.simplex_software.quarkus_xa.money_xfr.account.exception.*;
+import fr.simplex_software.quarkus_xa.money_xfr.account.service.*;
 import fr.simplex_software.quarkus_xa.money_xfr.transfer.domain.*;
 import fr.simplex_software.quarkus_xa.money_xfr.transfer.service.*;
 import jakarta.inject.*;

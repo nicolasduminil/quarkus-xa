@@ -20,49 +20,24 @@ public class TransactionalAccountClient
   TransactionManager transactionManager;
 
   @Transactional
-  public void debit(String accountId, BigDecimal amount) throws TransactionFailedException
-  {
-    try
-    {
-      accountClient.debit(accountId, amount);
-      txSync(accountId);
-    }
-    catch (Exception e)
-    {
-      try
-      {
+  public void transferMoney(String fromAccountId, String toAccountId, BigDecimal amount)
+    throws TransactionFailedException {
+    try {
+      System.out.println ("### TransactionalAccountClient.transferMoney(): credit from " + fromAccountId + ", to " + toAccountId + ", amount " + amount);
+      accountClient.credit(toAccountId, amount);
+      System.out.println ("### TransactionalAccountClient.transferMoney(): done");
+      txSync(toAccountId);
+      accountClient.debit(fromAccountId, amount);
+      System.out.println ("### TransactionalAccountClient.transferMoney(): debit from " + fromAccountId + ", to " + toAccountId + ", amount " + amount);
+      txSync(fromAccountId);
+    } catch (Exception e) {
+      try {
+        System.out.println("### TransactionalAccountClient.transferMoney(): rollback");
         transactionManager.getTransaction().setRollbackOnly();
-      }
-      catch (SystemException se)
-      {
+      } catch (SystemException se) {
         logger.error("### Could not mark transaction for rollback", se);
       }
-      throw new TransactionFailedException("### Failed to process debit", e);
-    }
-  }
-
-  /**
-   * Performs a credit operation within a transaction context
-   */
-  @Transactional
-  public void credit(String accountId, BigDecimal amount) throws TransactionFailedException
-  {
-    try
-    {
-      accountClient.credit(accountId, amount);
-      txSync(accountId);
-    }
-    catch (Exception e)
-    {
-      try
-      {
-        transactionManager.getTransaction().setRollbackOnly();
-      }
-      catch (SystemException se)
-      {
-        logger.error("### Could not mark transaction for rollback", se);
-      }
-      throw new TransactionFailedException("### Failed to process credit", e);
+      throw new TransactionFailedException("### Failed to process transfer", e);
     }
   }
 
@@ -74,7 +49,7 @@ public class TransactionalAccountClient
       @Override
       public void beforeCompletion()
       {
-        logger.info(">>> About to complete debit transaction for account {}", accountId);
+        logger.info(">>> About to complete transaction for account {}", accountId);
       }
 
       @Override
@@ -82,11 +57,11 @@ public class TransactionalAccountClient
       {
         if (status == Status.STATUS_COMMITTED)
         {
-          logger.info(">>> Debit transaction completed successfully for account {}", accountId);
+          logger.info(">>> Transaction completed successfully for account {}", accountId);
         }
         else
         {
-          logger.warn("### Debit transaction failed for account {}", accountId);
+          logger.warn("### Transaction failed for account {}", accountId);
         }
       }
     });
